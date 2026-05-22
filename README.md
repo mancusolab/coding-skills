@@ -3,7 +3,6 @@
 This repository stores useful Codex skills for scientific Python, Rust,
 Python/Rust bridge design, and data-engineering workflows.
 
-
 ## Contents
 
 The repository is packaged as a local Codex plugin named `coding-skills`.
