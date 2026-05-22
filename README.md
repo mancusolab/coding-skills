@@ -1,14 +1,7 @@
 # Coding Skills
 
-This repository stores Codex skills for scientific Python, Rust,
+This repository stores useful Codex skills for scientific Python, Rust,
 Python/Rust bridge design, and data-engineering workflows.
-
-## Metadata
-
-- Plugin name: `coding-skills`
-- Repository: `https://github.com/mancusolab/coding-skills`
-- License: MIT
-- Maintainer: Mancuso Lab
 
 ## Contents
 
