@@ -1,0 +1,39 @@
+{
+  "name": "coding-skills",
+  "version": "0.1.0",
+  "description": "Codex skills for scientific Python, Rust, data engineering, and Python/Rust bridge workflows.",
+  "author": {
+    "name": "Mancuso Lab",
+    "email": "nick.mancuso@gmail.com",
+    "url": "https://github.com/mancusolab"
+  },
+  "homepage": "https://github.com/mancusolab/coding-skills",
+  "repository": "https://github.com/mancusolab/coding-skills",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "skills",
+    "jax",
+    "equinox",
+    "polars",
+    "rust",
+    "pyo3",
+    "scientific-python"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Coding Skills",
+    "shortDescription": "Coding and scientific software skills for Codex.",
+    "longDescription": "Coding Skills provides Codex skill definitions for JAX/Equinox numerics and project engineering, Polars data engineering, Python module design, Python/Rust bridge design, and pragmatic Rust review guidance.",
+    "developerName": "Mancuso Lab",
+    "category": "Productivity",
+    "capabilities": [
+      "Skills"
+    ],
+    "defaultPrompt": [
+      "Use $python-rust-bridge to review this package.",
+      "Use $jax-equinox-numerics to check this solver.",
+      "Use $polars-data-engineering to review this pipeline."
+    ]
+  }
+}

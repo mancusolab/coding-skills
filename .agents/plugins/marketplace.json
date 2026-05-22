@@ -1,0 +1,20 @@
+{
+  "name": "coding-skills-local",
+  "interface": {
+    "displayName": "Coding Skills Local"
+  },
+  "plugins": [
+    {
+      "name": "coding-skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/coding-skills"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
