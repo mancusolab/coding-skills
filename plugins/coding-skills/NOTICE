@@ -1,0 +1,38 @@
+Coding Skills attribution and license scope
+
+The original domain skills and other files, except the adaptations listed below
+and separately attributed license texts, are covered by the MIT license in
+LICENSE. Copyright (c) 2026 Mancuso Lab.
+
+The following directories, including their companion references, are adaptations
+distributed under Creative Commons Attribution-ShareAlike 4.0 International:
+
+- skills/design-software/
+- skills/plan-implementation/
+- skills/implement-plan/
+- skills/review-code/
+
+Source: Scientific Software Playbook, MancusoLab maintainers and contributors.
+https://github.com/mancusolab/scientific-software-playbook
+Source checkout base: 499f908005f692a0655729164a34cf288be05112, with local
+namespace-reference edits present when consulted on 2026-10-24.
+
+Source material: scientific-plan-execute's starting-a-design-plan,
+writing-design-plans, writing-implementation-plans, executing-an-implementation-plan,
+requesting-code-review, and verification-before-completion skills.
+
+Changes: consolidated into four independent Codex workflows; removed scientific
+readiness schemas, runtime translation, mandatory delegate registries, phase
+counts, session handoffs, and automatic commits; made scope, authorization,
+verification, and evidence-backed review explicit. No runtime dependency on the
+source repository is required.
+
+The playbook attributes its plan/execute workflow to ed3dai/ed3d-plugins:
+https://github.com/ed3dai/ed3d-plugins/tree/main/plugins/ed3d-plan-and-execute
+That lineage includes obra/superpowers by Jesse Vincent:
+https://github.com/obra/superpowers
+
+See LICENSE.workflows for the source CC BY-SA notice and LICENSE.superpowers
+for the retained upstream MIT notice. The CC BY-SA 4.0 license is available at
+https://creativecommons.org/licenses/by-sa/4.0/ . These attributions do not imply
+endorsement by the source authors.

@@ -3,6 +3,19 @@
 For overlap between the Python, JAX, Polars, and Python/Rust skills, see
 `skill-boundaries.md`. For pressure-test notes, see `validation-notes.md`.
 
+## Workflow skills
+
+| Skill | Scope | Companion material |
+| --- | --- | --- |
+| `design-software` | Repository-grounded design, meaningful clarification, alternatives, acceptance criteria | `references/design-outline.md`, shared `references/domain-routing.md` |
+| `plan-implementation` | Executable tasks, dependencies, verification coverage | `references/plan-outline.md` |
+| `implement-plan` | Execution, progress, verification, review and fixes | None |
+| `review-code` | Scoped findings, evidence, correction review | None |
+
+These are Codex-only adaptations of the playbook workflows. They can be used
+independently and do not require the original playbook installation. See `../NOTICE`
+for provenance and licensing.
+
 ## `jax-equinox-numerics`
 
 JAX and Equinox numerics guidance, including traced execution, PyTree/static

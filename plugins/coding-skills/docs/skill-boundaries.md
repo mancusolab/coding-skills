@@ -8,6 +8,10 @@ when the task crosses that boundary.
 
 | Skill | Owns | Does not own |
 | --- | --- | --- |
+| `design-software` | Requirements, repository investigation, alternatives, design decisions, acceptance criteria | Task execution, universal approval gates, scientific model selection |
+| `plan-implementation` | Task decomposition, dependency order, acceptance-to-verification mapping | Reopening settled design decisions, speculative implementations, mandatory branch creation |
+| `implement-plan` | Authorized execution, progress, verification, review/fix closure | Product scope expansion, automatic publication, compulsory delegation |
+| `review-code` | Evidence-backed findings and review of corrections | Unrequested edits, speculative hardening, independent-review claims without independent review |
 | `python-module-design` | Python package layout, file/module granularity, subpackage promotion, placement of passive types, helpers, and exceptions | JAX tracing semantics, Polars lazy/eager execution, Rust bridge ownership, project release policy |
 | `jax-equinox-numerics` | JIT boundaries, PyTrees, static/dynamic fields, Equinox module semantics, dtype stability, solver/sampler contracts, AD and batching tests | Public API lifecycle, CLI shape, packaging, docs policy, broad Python module layout |
 | `jax-project-engineering` | JAX/Equinox public API stability, CLI contracts, docs/docstrings, pyproject policy, type checking, CI, serialization/checkpoints | Traced execution internals, Polars query design, generic Python package granularity |
@@ -75,3 +79,22 @@ priority below the adapter boundary.
 - Rust-backed Python question: start with `python-rust-bridge`; must add
   `pragmatic-rust-guidelines` when implementing or reviewing Rust API, unsafe,
   FFI, PyO3 adapter, GIL, panic, feature-flag, or performance behavior.
+
+## Workflow entrypoints
+
+Use `design-software` for consequential design choices, `plan-implementation`
+for a task breakdown, `implement-plan` for execution, and `review-code` for
+inspection. Each is independently invocable. A clear small change needs neither
+a design document nor a separate plan. Conversation context can supply the
+requirements and authorization; do not require a chain of handoff files.
+
+Workflow skills own the process; domain skills own technical decisions. There
+is no dependency on Scientific Software Playbook's skill catalog, scripts,
+agents, or readiness state. Resolve sibling skills and companion files relative
+to the installed skill directory, never a source checkout or versioned cache path.
+
+## Workflow domain routing
+
+Use the [shared domain routing table](../skills/design-software/references/domain-routing.md)
+when a workflow decision touches one of the bundled technologies. The table lives
+with the design skill so it is included in both plugin and direct skill installs.

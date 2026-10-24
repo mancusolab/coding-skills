@@ -1,7 +1,7 @@
 # Coding Skills
 
-This repository stores useful Codex skills for scientific Python, Rust,
-Python/Rust bridge design, and data-engineering workflows.
+Codex skills for designing, planning, implementing, and reviewing software,
+with domain guidance for Python, JAX/Equinox, Polars, and Rust.
 
 ## Contents
 
@@ -11,6 +11,10 @@ frontmatter description.
 
 | Skill | What it does |
 | --- | --- |
+| `design-software` | Grounds design decisions in the repository and defines observable acceptance criteria. |
+| `plan-implementation` | Turns agreed requirements into dependency-ordered tasks and verification steps. |
+| `implement-plan` | Executes authorized work, tracks progress, verifies behavior, and handles review findings. |
+| `review-code` | Reviews changes or existing code for actionable defects against requirements and repository contracts. |
 | `jax-equinox-numerics` | Applies JAX and Equinox numerics rules: JIT boundaries, PyTrees, static/dynamic fields, dtype stability, solver/sampler contracts, AD, and batching tests. |
 | `jax-project-engineering` | Covers project-level engineering for JAX/Equinox code: public APIs, CLI contracts, docs, packaging, serialization, type checks, and CI gates. |
 | `polars-data-engineering` | Guides Polars `LazyFrame`/`DataFrame` workflows: lazy planning, materialization boundaries, joins, reconciliation, null policy, and `to_jax()` export. |
@@ -21,6 +25,24 @@ frontmatter description.
 See `plugins/coding-skills/docs/skill-boundaries.md` for the boundary between
 overlapping skills, especially the Python/JAX/Polars/Python-Rust split.
 
+## Use the workflows
+
+Start at the stage you need. A small fix can go straight to implementation;
+a review does not require a design or plan. For a larger change:
+
+```text
+Use $design-software to design resumable imports for this repository.
+Use $plan-implementation to turn the agreed design into executable tasks.
+Use $implement-plan to carry out that plan and verify the changes.
+Use $review-code to review the working-tree changes against the requirements.
+```
+
+The workflows use the relevant domain skills from this bundle. They do not
+require scientific-software-playbook, other home skills, custom agents, hooks,
+MCP servers, or a fresh session between stages. Existing authorization carries
+forward; design-only and review-only requests stay within their requested scope.
+Delegation is optional and subject to the session's permissions.
+
 ## Install
 
 ### Plugin install
@@ -30,17 +52,21 @@ From the repository root:
 
 ```bash
 codex plugin marketplace add .
+codex plugin add coding-skills@coding-skills-local
 ```
 
-Then restart Codex. In the plugin browser, select the `Coding Skills Local`
-marketplace and install `coding-skills`.
+Start a new Codex session. You can also install from the `Coding Skills Local`
+marketplace in `/plugins`.
 
 To refresh after pulling changes:
 
 ```bash
 git pull
-codex plugin marketplace upgrade coding-skills-local
+codex plugin add coding-skills@coding-skills-local
 ```
+
+Then start a new session to load the refreshed skills. `marketplace upgrade`
+refreshes configured Git marketplace snapshots; this setup uses a local checkout.
 
 ### Direct skill install
 
@@ -53,8 +79,13 @@ rsync -a --exclude __pycache__ --exclude '*.pyc' \
   plugins/coding-skills/skills/ "$HOME/.agents/skills/"
 ```
 
-This installs:
+Choose either plugin installation or direct installation to avoid duplicate
+skill discovery. Direct installation includes:
 
+- `design-software`
+- `plan-implementation`
+- `implement-plan`
+- `review-code`
 - `jax-equinox-numerics`
 - `jax-project-engineering`
 - `polars-data-engineering`
@@ -78,3 +109,10 @@ For direct installs, you can also check the installed files:
 ```bash
 find "$HOME/.agents/skills" -maxdepth 2 -name SKILL.md | sort
 ```
+
+## Licensing
+
+The original six domain skills remain MIT-licensed. The four workflow skills
+are adapted from Scientific Software Playbook and distributed under CC BY-SA
+4.0. See [the attribution and file-scope notice](plugins/coding-skills/NOTICE)
+and the license files bundled with the plugin.
