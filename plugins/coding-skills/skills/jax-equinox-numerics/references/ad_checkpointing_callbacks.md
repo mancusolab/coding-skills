@@ -116,7 +116,8 @@ def stable_norm(x):
 def _jvp(primals, tangents):
     (x,), (tx,) = primals, tangents
     y = stable_norm(x)
-    return y, jnp.where(y == 0, 0.0, jnp.vdot(x, tx) / y)
+    denom = jnp.where(y == 0, 1.0, y)
+    return y, jnp.where(y == 0, 0.0, jnp.vdot(x, tx) / denom)
 ```
 - Allowed break: Array-only functions can use `jax.custom_jvp`/`jax.custom_vjp`.
 
@@ -154,7 +155,10 @@ def abstract_eval(...):
 - Why: Catches AD regressions and batching bugs early.
 - Example:
 ```python
-out, t_out = eqx.filter_jit(eqx.filter_jvp(f))((x,), (tx,))
+import functools as ft
+import equinox as eqx
+
+out, t_out = eqx.filter_jit(ft.partial(eqx.filter_jvp, f))((x,), (tx,))
 # compare with finite_difference_jvp(...)
 ```
 - Allowed break: Minimal smoke tests for early prototypes.

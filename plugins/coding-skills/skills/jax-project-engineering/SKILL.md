@@ -10,7 +10,7 @@ metadata:
 
 Guidance for software engineering practices around numerical/JAX codebases.
 
-## Scope boundary (authoritative split)
+## Scope boundary
 
 This skill is authoritative for project-level engineering contracts:
 - public API stability and compatibility policy
@@ -26,36 +26,24 @@ This skill is not the source of truth for numerics runtime semantics. For:
 - AD/batching/transform correctness
 use `../jax-equinox-numerics/SKILL.md`.
 
-## Path Contract (Unambiguous)
+## Companion resources
 
-1. All relative paths in this file resolve from this skill directory (the directory containing this `SKILL.md`).
-2. Companion checklist and snippet paths are installation-local paths relative to this directory.
+Paths below are relative to this skill directory. Read the checklists relevant
+to the task before implementation, apply them while working, and revisit them
+before completion. Document any intentionally unchecked item.
 
-## Companion checklists
+### Checklists
 
-Apply these checklists when using this skill.
-
-### Installation-local paths (relative to this `SKILL.md`)
 - `checklists/jax_project_engineering_checklist.md`
 - `checklists/testing_checklist.md`
 
-## Checklist workflow
-- Before implementation: open the relevant companion checklist(s) and scope the work against them.
-- During implementation: keep checklist items aligned with code/design decisions.
-- Before completion: re-run the checklist and explicitly document any intentionally unchecked item.
+### Snippets
 
-## Companion snippets
+Adapt matching snippets to the target repository's conventions and verify the
+adapted code against the relevant checklists.
 
-Use these snippets as implementation starters when they match the task.
-
-### Installation-local paths (relative to this `SKILL.md`)
 - `snippets/cli_skeleton.py`
 - `snippets/pyproject_minimal.toml`
-
-## Snippet workflow
-- Before implementation: start from the closest snippet and align it with repository conventions.
-- During implementation: keep public API shape, docs style, and error semantics consistent with this skill.
-- Before completion: remove placeholders and verify snippet-derived code is fully integrated.
 
 ## Public API stability
 
@@ -63,11 +51,6 @@ Use these snippets as implementation starters when they match the task.
 - Do: Preserve return shapes/fields and document failure semantics (status channels and/or exceptions).
 - Don’t: Change return structures or error semantics without deprecation.
 - Why: Scientific workflows rely on stable interfaces.
-- Example:
-```python
-# Return a stable, documented contract
-return out
-```
 - Allowed break: Major version bump with migration guide.
 
 ### Rule: Keep one canonical entrypoint per workflow
@@ -138,33 +121,13 @@ class GWASError(ValueError):
 - Don’t: Remove or rename enum members without a deprecation window.
 - Why: Result enums are part of the public API contract.
 
-### Rule: [Installation-local policy] Keep companion assets co-located with this installed skill
-- Do: Use companion checklists/snippets in `checklists/` and `snippets/` (relative to this `SKILL.md`).
-- Don’t: Add references to external-only asset paths when editing this plugin.
-- Why: Users can apply this project directly even without separately installed global skills.
-- Note: If this skill is exported elsewhere, package companion checklists/snippets alongside it.
-
 ## pyproject.toml (project configuration)
 
 ### Rule: Centralize project metadata and tooling in `pyproject.toml`
 - Do: Declare Python version, dependencies, optional extras, and tool configs in one place.
 - Don’t: Scatter configuration across multiple files without justification.
 - Why: Single source of truth reduces drift.
-- Example (minimal structure):
-```toml
-[project]
-name = "my-lib"
-requires-python = ">=3.10"
-
-[project.optional-dependencies]
-test = ["pytest", "pytest-xdist"]
-
-[tool.ruff]
-line-length = 88
-
-[tool.pyright]
-typeCheckingMode = "strict"
-```
+- Example: `snippets/pyproject_minimal.toml`.
 - Allowed break: Legacy repos that already standardize on separate config files.
 
 ### Rule: Pin minimum versions for core scientific deps
@@ -194,10 +157,10 @@ def f(x: PyTree[Array]) -> PyTree[Array]:
 
 ## CLI building
 
-### Rule: Keep CLI deterministic and profile-aligned
+### Rule: Keep CLI deterministic and cohesive
 - Do: Parse args in `main()` and return explicit exit codes.
-- Do: for `compact-workflow`, allow CLI-level workflow glue (load -> validate -> numerics -> write output) in one file/module.
-- Do: for `modular-domain`, keep orchestration in shallow domain modules and keep CLI handlers focused on dispatch.
+- Do: Keep workflow glue (load -> validate -> numerics -> write output) in one module when the workflow is small and cohesive.
+- Do: Move repeated domain workflows into shallow modules and keep CLI handlers focused on dispatch when that separation improves cohesion.
 - Don’t: Execute JAX code at import time or use global state.
 - Why: Keeps CLI deterministic and testable.
 - Example:
@@ -265,7 +228,6 @@ def main(argv=None):
 jax.config.update("jax_enable_x64", True)
 jax.config.update("jax_platform_name", "cpu")
 ```
-- Reference pattern: `tmp/jaxqtl/src/jaxqtl/cli.py` sets platform directly from parsed args and only adds a small TPU-specific x64 exception; `sim_bulk.py` and `sim_sc.py` use the fixed-platform variant.
 - Escalate beyond this only when there is a real cross-entrypoint policy contract to share, such as multiple executables that must apply the exact same validated backend-selection rules.
 
 ### Rule: Define stable stdout/stderr and exit-code contracts
@@ -340,84 +302,10 @@ return args.func(args)
 - Do: Write a failing test first, then fix.
 - Don’t: Merge fixes without test coverage.
 
-## Validation Scenarios
+## Skill validation
 
-Use these prompts to validate compliance under pressure:
-
-1. Logging vs `print`
-```markdown
-IMPORTANT: This is a real scenario. Choose and act.
-
-Production logs are noisy. A teammate asks for a quick `print("step", i)` in solver code
-to debug a flaky issue before today's release.
-
-Options:
-A) Add `print(...)` in the solver loop.
-B) Add structured logging/callback diagnostics at boundaries and keep traced kernels print-free.
-C) Add `print(...)` now and remove it later.
-
-Choose A, B, or C.
-```
-
-2. Subcommand dispatch contract
-```markdown
-IMPORTANT: This is a real scenario. Choose and act.
-
-You are adding `benchmark` and `check` subcommands. A reviewer says direct `if args.cmd == ...`
-branches are faster to write than per-command handlers.
-
-Options:
-A) Keep one large `if/elif` dispatch block.
-B) Bind handlers with `set_defaults(func=...)` and dispatch with `args.func(args)`.
-C) Mix both patterns for now.
-
-Choose A, B, or C.
-```
-
-3. One-off API surface pressure
-```markdown
-IMPORTANT: This is a real scenario. Choose and act.
-
-A stakeholder requests `solve_fast_for_team_x()` with slightly different defaults.
-Release is in 2 hours.
-
-Options:
-A) Add the one-off public function.
-B) Extend the canonical entrypoint with explicit options/config and keep a single workflow entrypoint.
-C) Add one-off now and deprecate later.
-
-Choose A, B, or C.
-```
-
-4. Boundary validation ownership
-```markdown
-IMPORTANT: This is a real scenario. Choose and act.
-
-Invalid `max_steps` sometimes reaches a jitted solver. A teammate suggests raising
-`ValueError` from inside the traced step function for simplicity.
-
-Options:
-A) Raise Python exceptions inside the jitted loop.
-B) Validate and raise at boundary layers; apply traced-kernel rules from `jax-equinox-numerics`.
-C) Leave it unvalidated and rely on downstream failures.
-
-Choose A, B, or C.
-```
-
-5. Public API contract scope pressure
-```markdown
-IMPORTANT: This is a real scenario. Choose and act.
-
-You have a non-numerics public helper that returns a user summary report.
-A teammate wants it to return internal solver containers directly "for consistency".
-
-Options:
-A) Return internal solver containers from every public helper.
-B) Keep public helper contracts domain-oriented and document numerics-container usage explicitly only where needed.
-C) Return both container and ad-hoc summary everywhere.
-
-Choose A, B, or C.
-```
+Read [validation scenarios](references/validation-scenarios.md) when testing or
+revising this skill.
 
 ## Serialization / checkpoints
 

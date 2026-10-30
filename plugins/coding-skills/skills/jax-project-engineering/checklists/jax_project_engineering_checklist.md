@@ -40,7 +40,7 @@ Use this for general software engineering hygiene around numerical/JAX projects.
 - [ ] Load paths validate version compatibility or provide migration notes.
 
 ## CLI
-- [ ] CLI architecture matches declared profile (`compact-workflow` may include glue; `modular-domain` keeps orchestration separated) and avoids import-time side effects.
+- [ ] CLI orchestration stays cohesive: small workflows may keep glue in one module; repeated domain workflows use shallow modules. Imports have no execution side effects.
 - [ ] CLI exposes reproducibility controls where relevant (seed/dtype/device and version reporting).
 - [ ] Multi-workflow CLIs use subcommand handler binding (`set_defaults(func=...)`) and a single `args.func(args)` dispatch.
 

@@ -11,10 +11,7 @@ metadata:
 Guidance for engineering workflows that use Polars `DataFrame` and `LazyFrame`,
 especially when tabular preparation feeds JAX or other numerical code.
 
-This file is the entrypoint. Keep it lightweight and load focused companions only
-when they apply.
-
-## Scope boundary (authoritative split)
+## Scope boundary
 
 This skill is authoritative for Polars tabular workflow semantics:
 - `LazyFrame` vs `DataFrame` boundary decisions
@@ -33,25 +30,17 @@ For those concerns use:
 - `../jax-project-engineering/SKILL.md`
 Use repository architecture instructions for non-Polars layering concerns.
 
-## Path Contract (Unambiguous)
-
-1. All relative paths in this file resolve from this skill directory (the directory containing this `SKILL.md`).
-2. Companion checklist paths are installation-local paths relative to this directory.
-
 ## Companion checklists
 
-Apply these checklists when using this skill.
+Paths below are relative to this skill directory. Read the checklists relevant
+to the task before implementation, apply them while working, and revisit them
+before completion. Document any intentionally unchecked item.
 
-### Installation-local paths (relative to this `SKILL.md`)
 - `checklists/polars_lazyframe_boundary_checklist.md`
 - `checklists/polars_sources_sinks_interchange_checklist.md`
 
-## Checklist workflow
-- Before implementation: open the relevant checklist(s) and scope the work against them.
-- During implementation: keep lazy/eager boundaries, reconciliation, and interchange policy aligned with the chosen checklist(s).
-- Before completion: re-run the checklist(s) and explicitly document any intentionally unchecked item.
+## Definitions
 
-## Definitions (strict)
 - Lazy query: a `pl.LazyFrame` expression graph that has not been materialized.
 - Materialization boundary: the point where a lazy plan is executed with `collect()` or equivalent sink.
 - Tabular adapter: code that loads, validates, reconciles, and converts Polars objects for downstream consumers.
@@ -184,57 +173,10 @@ Apply these checklists when using this skill.
 - Why: Polars provides a native lazy CSV sink specifically for streaming output larger than RAM.
 - Note: As of March 3, 2026, Polars documents `LazyFrame.sink_csv(..., compression=..., compression_level=..., check_extension=...)` and marks the sink API unstable.
 
-## Validation Scenarios
+## Skill validation
 
-Use these prompts to harden lazy-boundary and adapter-boundary compliance:
-
-1. Lazy-vs-eager pressure
-```markdown
-IMPORTANT: This is a real scenario. Choose and act.
-
-You need to clean, join, and aggregate three parquet-backed tables before
-feeding the result into a model training step.
-
-Options:
-A) Read each table eagerly, mutate step by step, and materialize after every join.
-B) Build one lazy query pipeline, validate at the adapter boundary, then collect once near export.
-C) Mix lazy and eager opportunistically with no stated boundary.
-
-Choose A, B, or C.
-```
-
-2. `to_jax()` pressure
-```markdown
-IMPORTANT: This is a real scenario. Choose and act.
-
-A teammate wants to call `to_jax()` "somewhere later" after data prep already
-crossed into numerics code.
-
-Options:
-A) Let Polars objects cross the numerics boundary and convert when convenient.
-B) Keep Polars in the adapter layer, collect to `DataFrame`, then convert once at the boundary.
-C) Skip `to_jax()` and rely on implicit downstream coercion.
-
-Choose A, B, or C.
-```
-
-3. Positional-alignment pressure
-```markdown
-IMPORTANT: This is a real scenario. Choose and act.
-
-Three parquet-backed tables share sample IDs. The model only needs arrays, and
-the row counts happen to match. A teammate wants to horizontally concatenate
-the tables, convert each one to JAX, and debug shape errors downstream.
-
-Options:
-A) Horizontally concatenate independently loaded tables because row counts match.
-B) Join by explicit keys, validate cardinality and missing keys, freeze row
-   order, then export arrays.
-C) Convert each table to JAX and rely on downstream shape checks.
-
-Choose A, B, or C.
-```
-Correct behavior: choose B. Matching row counts are not an alignment contract.
+Read [validation scenarios](references/validation-scenarios.md) when testing or
+revising this skill.
 
 ## Reference map (load on demand)
 

@@ -309,46 +309,7 @@ For binary packages:
 | Testing only Rust internals | Test the Python surface and conversion edge cases. |
 | Treating binary distribution as an importable API | Keep CLI Python packages as launchers unless a real Python API exists. |
 
-## Validation Scenarios
+## Skill validation
 
-Use these prompts to test whether the skill resists common Python/Rust bridge
-shortcuts.
-
-1. CLI packaging pressure
-```markdown
-IMPORTANT: This is a real scenario. Choose and act.
-
-You have a Rust CLI and want `pip install tool`. A teammate proposes exposing a
-dummy PyO3 module with `run()` that shells out to the binary because it is the
-fastest packaging path.
-
-Options:
-A) Expose the dummy PyO3 module and call the binary from `run()`.
-B) Classify the project as a Rust CLI distributed through Python packaging; use
-   binary bindings and a tiny launcher, not a fake PyO3 API.
-C) Add both the dummy PyO3 API and binary launcher so users can choose.
-
-Choose A, B, or C.
-```
-Correct behavior: choose B. Python packaging for a CLI should not imply a fake
-importable PyO3 API.
-
-2. Opaque compiled-state persistence pressure
-```markdown
-IMPORTANT: This is a real scenario. Choose and act.
-
-A schema-driven Rust core compiles Python schemas into opaque Rust state.
-Checkpointing is requested today, and a teammate suggests pickling raw Rust
-bytes without version metadata.
-
-Options:
-A) Pickle the raw bytes because it restores quickly.
-B) Treat compiled state as a cache unless a stable serialized artifact contract
-   exists; add version metadata, migration or rejection behavior, and
-   compatibility tests before promising persistence.
-C) Store raw bytes and document that users should delete checkpoints after
-   upgrades.
-
-Choose A, B, or C.
-```
-Correct behavior: choose B. Fast restore is not a stable serialization contract.
+Read [validation notes](references/validation-notes.md) when testing or revising
+this skill.
