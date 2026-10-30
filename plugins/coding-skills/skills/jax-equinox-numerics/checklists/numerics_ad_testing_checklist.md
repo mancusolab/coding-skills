@@ -19,10 +19,11 @@ Use this for solver implementation and verification.
 - [ ] PyTree-shaped randomness uses split-by-tree helpers.
 
 ## Custom AD
-- [ ] For mixed PyTrees/Modules, custom AD uses `eqx.filter_custom_jvp`/`eqx.filter_custom_vjp`.
+- [ ] Custom AD chooses function-level filtered wrappers or a HiJAX primitive according to the required transformation contract; existing internal extensions are migrated only with equivalent coverage.
 - [ ] JVP/VJP calls on PyTree inputs use `eqx.filter_jvp`/`eqx.filter_vjp`.
 - [ ] Tangent-path solves use an explicit failure contract (`throw=True` or equivalent fail-fast behavior) when failures cannot be returned through a status channel.
-- [ ] Custom primitives include abstract_eval + JVP + transpose.
+- [ ] New HiJAX primitives declare types/static parameters and a traceable expansion; required JVP, VJP, linearization, and batching behavior is implemented or explicitly derived and tested.
+- [ ] Experimental HiJAX usage is checked against the project's supported JAX versions.
 - [ ] Nondifferentiable state/options/metadata are guarded (`eqxi.nondifferentiable` / `eqxi.nondifferentiable_backward`).
 
 ## Memory and callbacks

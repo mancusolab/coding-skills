@@ -5,7 +5,10 @@ Detailed rules for AD wrappers, tangent-failure behavior, nondifferentiable meta
 ## AD and checkpointing
 
 ### Rule: Use Equinox AD wrappers for custom JVP/VJP
-- Do: Prefer `eqx.filter_custom_jvp`/`eqx.filter_custom_vjp` for custom AD on PyTrees.
+- Do: Use `eqx.filter_custom_jvp`/`eqx.filter_custom_vjp` for function-level custom
+  AD on mixed PyTrees when filtered wrappers fit the required transformations.
+- For a new primitive with its own transformation rules, consider
+  [HiJAX](hijax_primitives.md) before Equinox internal primitive helpers.
 - Don’t: Use raw `jax.custom_*` and then manually manage static/dynamic leaves.
 - Why: Keeps PyTree filtering consistent with Equinox transformations.
 - Example:
@@ -119,33 +122,22 @@ def _jvp(primals, tangents):
     denom = jnp.where(y == 0, 1.0, y)
     return y, jnp.where(y == 0, 0.0, jnp.vdot(x, tx) / denom)
 ```
+- This example is for real-valued arrays and defines a zero-tangent convention
+  at the origin, where the ordinary Euclidean norm is not differentiable. It is
+  not a general overflow-safe norm implementation.
 - Allowed break: Array-only functions can use `jax.custom_jvp`/`jax.custom_vjp`.
 
-### Rule: For custom primitives, implement abstract_eval + JVP + transpose
-- Do: Provide full AD rules and guard nondiff data.
-- Don’t: Register a primitive without transpose/JVP or with leaked tracers.
-- Why: Missing rules break AD and batching.
-- Example:
-```python
-# Pseudocode: define impl, abstract_eval, jvp, transpose
-# and use materialised zeros for missing tangents.
-```
-- Allowed break: Research prototypes that intentionally skip AD.
-
-### Rule: Prefer Equinox primitive helpers when defining primitives
-- Do: Use `eqxi.filter_primitive_def`/`filter_primitive_jvp`/`filter_primitive_transpose`.
-- Don’t: Reimplement primitive registration without filtering static leaves.
-- Why: Keeps static/dynamic leaves consistent for AD and batching.
-- Example:
-```python
-import equinox.internal as eqxi
-
-@eqxi.filter_primitive_def
-def abstract_eval(...):
-    ...
-```
-- Allowed break: Pure array primitives with no static leaves.
-- Note: Advanced/internal usage only. These APIs may change; avoid depending on them in public libraries.
+### Rule: Choose primitive machinery by the required transformations
+- Prefer [HiJAX primitives](hijax_primitives.md) for new JAX-defined operations
+  needing a primitive boundary and custom transformation rules, when the project
+  accepts the experimental API and tests its supported JAX versions.
+- Use the runnable [HiJAX example](../snippets/hijax_polynomial.py) instead of
+  starting new code from `eqxi.filter_primitive_*` scaffolding.
+- Specify and test the transformations actually supported. A primal implementation
+  or JVP rule alone does not establish reverse-mode, linearization, or batching.
+- Keep existing low-level or Equinox-internal primitives when their integration
+  requires them; migrate only after matching their semantics and tests. HiJAX is
+  not a replacement for every Equinox internal utility or a numerical speedup claim.
 
 ## Performance instrumentation and testing
 

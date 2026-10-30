@@ -4,6 +4,46 @@ Validation targets the source-of-truth skills under
 `plugins/coding-skills/skills/`. The historical testing skill named below is
 not a runtime dependency of this plugin.
 
+## 2026-10-29: HiJAX guidance
+
+Replaced the default Equinox internal primitive-helper recommendation with
+conditional HiJAX guidance for new primitives. Kept function-level public custom
+JVP/VJP wrappers and unrelated solver internals. Updated the entrypoint, AD
+reference, solver reference, and checklist together.
+
+Added `hijax_primitives.md`, a runnable real-array polynomial primitive, and five
+transformation tests. Verified the installed `jax.experimental.hijax` API on
+JAX 0.12.0.1 against current official JAX documentation. Tests check primal/JVP,
+reverse and second derivatives, linearization, nonleading batch axes, batched
+gradients, and dtype rejection. All twelve numerical tests pass in both default
+and float64 modes. New snippets pass Ruff lint/format checks; isolated plugin
+Markdown links, Python syntax, and diff whitespace checks pass.
+
+No performance improvement is claimed. Custom HiTypes, distributed sharding,
+accumulator-based backward rules, and older JAX releases were not validated.
+The polynomial demonstrates the API; ordinary polynomial code needs no custom
+primitive. Existing skill names and discovery descriptions are preserved.
+
+## 2026-10-29: Hygiene and regression coverage (0.3.2)
+
+Reconstructed the previously missing
+[test_ad_examples.py](../skills/jax-equinox-numerics/snippets/test_ad_examples.py).
+The new tests execute the runnable AD reference examples and check analytic
+forward/reverse derivatives, the zero-tangent convention, JIT binding, and a
+batched implicit solve. They do not claim to recover the original uncommitted test.
+
+- Seven numerical tests pass in both default and float64 modes using the command
+  recorded below (`JAX_ENABLE_X64=1` selects float64).
+- In an isolated copy, restoring the old unguarded denominator and incorrect
+  `filter_jvp` binding produces two failures: NaN reverse derivatives at zero
+  and missing JVP arguments. The other four new cases pass.
+- Clarified the real-array norm example's zero-tangent convention and limits.
+- Aligned JAX regression guidance with the bundled testing/debugging skills:
+  reproduce first when practical; document alternative verification when needed.
+- The new test passes Ruff lint and formatting checks; isolated-copy Markdown
+  links, Python syntax, JSON manifests, and diff whitespace checks pass.
+- Preserved the historical records below, including their original scope.
+
 ## 2026-10-29: Branch reconciliation
 
 Merged the remote domain cleanup with the local workflow and four-skill ports.
@@ -11,10 +51,10 @@ Preserved both validation histories. The cleanup commit omitted four linked
 `references/validation-scenarios.md` files; restored their prompt contents from
 the prior tracked skill entrypoints.
 
-The cleanup also refers to `snippets/test_ad_examples.py`, which is absent from
-both branches. Its reported seven-test results below are historical claims from
-the cleanup session, not reproducible from the committed files. The missing test
-was not recreated during this merge. Available Python files pass syntax checks;
+The cleanup also refers to `snippets/test_ad_examples.py`, which was absent from
+both branches at reconciliation. Its reported seven-test results below are historical claims from
+the cleanup session, which were not reproducible from the merged files. The missing test
+was not recreated during that merge; replacement coverage is recorded above. Available Python files pass syntax checks;
 local Markdown links and plugin/marketplace JSON were checked after reconciliation.
 
 ## 2026-10-29
@@ -32,7 +72,8 @@ Fixed four executable-example defects in `jax-equinox-numerics`:
 - The finite-difference helper chooses its default step from the input dtype's
   machine epsilon rather than assuming float64 precision.
 
-The cleanup record describes `test_ad_examples.py` as exercising the reference code blocks and implicit solve under JIT, checking
+The cleanup record describes `test_ad_examples.py` as exercising the reference
+code blocks and implicit solve under JIT, checking
 analytic derivatives at zero and nonzero inputs. The
 existing finite-difference test checks the dtype-sensitive comparison. These
 tests reproduced the failures before the fixes.
@@ -48,7 +89,8 @@ uv run --with jax --with equinox --with lineax --with optimistix --with pytest \
 Repeat with `JAX_ENABLE_X64=1` to check float64 behavior. The environment used
 JAX 0.12.0.1, Equinox 0.13.8, Lineax 0.1.1, and Optimistix 0.1.0 on CPU.
 
-Reported results from the cleanup session: seven tests passed in each precision mode, all ten non-test Python
+Reported results from the cleanup session: seven tests passed in each precision
+mode, all ten non-test Python
 snippets executed, and the modified Python files passed Ruff formatting and
 lint checks. Syntax, companion references, unchanged frontmatter, and preserved
 validation prompts were also checked.

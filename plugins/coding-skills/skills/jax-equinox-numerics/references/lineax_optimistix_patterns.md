@@ -92,7 +92,9 @@ if sol.result != optx.RESULTS.successful:
 - Allowed break: Unit tests that intentionally require immediate failure on non-success.
 
 ### Rule: Reserve semi-public internals for library-level extensions
-- Do: Use advanced internals (`eqxi.filter_primitive_*`, nontraceable checks, custom adjoint plumbing) only when building solver libraries.
+- Do: Reserve nontraceable checks and custom adjoint plumbing for solver-library
+  extensions. For new primitive definitions, consider [HiJAX](hijax_primitives.md)
+  before Equinox internal registration helpers.
 - Don’t: Expose semi-public internals as stable end-user APIs.
 - Why: Internal APIs are powerful but can change across versions.
 - Allowed break: Controlled internal codebases with pinned versions and dedicated maintenance.

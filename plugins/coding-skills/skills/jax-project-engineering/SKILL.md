@@ -299,8 +299,11 @@ return args.func(args)
 - Why: Numerical regressions are subtle and expensive.
 
 ### Rule: Add regression tests for bug fixes
-- Do: Write a failing test first, then fix.
-- Don’t: Merge fixes without test coverage.
+- Do: Reproduce the failure before fixing when practical, then verify the correction
+  with a regression test that exercises the affected contract.
+- Do: If a reproducer or automated test is impractical, record the reason and the
+  alternative verification performed; retain explicit uncertainty about coverage.
+- Don’t: Treat unrelated passing tests as evidence that the reported bug is fixed.
 
 ## Skill validation
 

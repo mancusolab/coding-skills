@@ -121,6 +121,6 @@ find "$HOME/.agents/skills" -maxdepth 2 -name SKILL.md | sort
 ## Licensing
 
 The original six domain skills remain MIT-licensed. The four workflow skills and
-four architecture, testing, and debugging skills are adapted from Scientific Software Playbook and distributed under CC BY-SA
-4.0. See [the attribution and file-scope notice](plugins/coding-skills/NOTICE)
+four architecture, testing, and debugging skills are adapted from Scientific
+Software Playbook and distributed under CC BY-SA 4.0. See [the attribution and file-scope notice](plugins/coding-skills/NOTICE)
 and the license files bundled with the plugin.

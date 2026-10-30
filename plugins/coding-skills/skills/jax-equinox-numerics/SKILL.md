@@ -58,6 +58,7 @@ the relevant checklists.
 - `snippets/filter_cond_static.py`
 - `snippets/linear_operator_pattern.py`
 - `snippets/custom_jvp_norm.py`
+- `snippets/hijax_polynomial.py`
 - `snippets/implicit_jvp.py`
 - `snippets/test_jvp_finite_difference.py`
 - `snippets/abc_module_pattern.py`
@@ -274,7 +275,9 @@ Load only the files relevant to your task.
 
 - `references/ad_checkpointing_callbacks.md`
   Covers Equinox AD wrappers, tangent-path failure rules, checkpointing, callback guidance,
-  custom primitive helpers, and AD-focused test/diagnostic patterns.
+  HiJAX primitive selection, and AD-focused test/diagnostic patterns.
+- [HiJAX primitive guidance](references/hijax_primitives.md): new primitive
+  definitions, migration from internal helpers, and transformation coverage.
 
 - `references/numerics_dtype_stability.md`
   Covers dtype normalization, guarded divisions/norms, and early nonfinite surfacing.
