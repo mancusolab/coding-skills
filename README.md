@@ -15,6 +15,10 @@ frontmatter description.
 | `plan-implementation` | Turns agreed requirements into dependency-ordered tasks and verification steps. |
 | `implement-plan` | Executes authorized work, tracks progress, verifies behavior, and handles review findings. |
 | `review-code` | Reviews changes or existing code for actionable defects against requirements and repository contracts. |
+| `functional-core-imperative-shell` | Separates domain computation from effects while preserving cohesive modules and transaction semantics. |
+| `property-based-testing` | Designs generated tests with meaningful properties, constrained inputs, and reproducible failures. |
+| `systematic-debugging` | Investigates failures with reproductions, discriminating experiments, and causal verification. |
+| `writing-good-tests` | Chooses test oracles, scope, isolation, and dependency boundaries around observable contracts. |
 | `jax-equinox-numerics` | Applies JAX and Equinox numerics rules: JIT boundaries, PyTrees, static/dynamic fields, dtype stability, solver/sampler contracts, AD, and batching tests. |
 | `jax-project-engineering` | Covers project-level engineering for JAX/Equinox code: public APIs, CLI contracts, docs, packaging, serialization, type checks, and CI gates. |
 | `polars-data-engineering` | Guides Polars `LazyFrame`/`DataFrame` workflows: lazy planning, materialization boundaries, joins, reconciliation, null policy, and `to_jax()` export. |
@@ -86,6 +90,10 @@ skill discovery. Direct installation includes:
 - `plan-implementation`
 - `implement-plan`
 - `review-code`
+- `functional-core-imperative-shell`
+- `property-based-testing`
+- `writing-good-tests`
+- `systematic-debugging`
 - `jax-equinox-numerics`
 - `jax-project-engineering`
 - `polars-data-engineering`
@@ -112,7 +120,7 @@ find "$HOME/.agents/skills" -maxdepth 2 -name SKILL.md | sort
 
 ## Licensing
 
-The original six domain skills remain MIT-licensed. The four workflow skills
-are adapted from Scientific Software Playbook and distributed under CC BY-SA
+The original six domain skills remain MIT-licensed. The four workflow skills and
+four architecture, testing, and debugging skills are adapted from Scientific Software Playbook and distributed under CC BY-SA
 4.0. See [the attribution and file-scope notice](plugins/coding-skills/NOTICE)
 and the license files bundled with the plugin.

@@ -16,6 +16,18 @@ These are Codex-only adaptations of the playbook workflows. They can be used
 independently and do not require the original playbook installation. See `../NOTICE`
 for provenance and licensing.
 
+## Architecture, testing, and debugging
+
+| Skill | Scope |
+| --- | --- |
+| `functional-core-imperative-shell` | Separates domain computation from effects while preserving cohesive modules and transaction semantics. |
+| `property-based-testing` | Designs generated tests with meaningful properties, constrained inputs, and reproducible failures. |
+| `systematic-debugging` | Investigates failures with reproductions, discriminating experiments, and causal verification. |
+| `writing-good-tests` | Chooses test oracles, scope, isolation, and dependency boundaries around observable contracts. |
+
+`property-based-testing` includes `references/property-catalog.md`. The other
+three are self-contained. These four skills are CC BY-SA adaptations; see `../NOTICE`.
+
 ## `jax-equinox-numerics`
 
 JAX and Equinox numerics guidance, including traced execution, PyTree/static

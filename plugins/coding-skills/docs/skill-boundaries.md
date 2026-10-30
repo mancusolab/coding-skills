@@ -96,5 +96,20 @@ to the installed skill directory, never a source checkout or versioned cache pat
 ## Workflow domain routing
 
 Use the [shared domain routing table](../skills/design-software/references/domain-routing.md)
-when a workflow decision touches one of the bundled technologies. The table lives
+when a workflow decision touches a bundled technology or engineering concern. The table lives
 with the design skill so it is included in both plugin and direct skill installs.
+
+## Architecture, testing, and debugging
+
+- `functional-core-imperative-shell` owns separation of computation and effects.
+  `python-module-design` owns file granularity; neither requires a file per layer.
+  Domain skills govern tracing, ownership, and other runtime constraints.
+- `writing-good-tests` owns test scope, oracles, isolation, and doubles.
+  `property-based-testing` owns generated input strategies, properties, shrinking,
+  and reproduction. Use both only when both decisions are relevant.
+- `systematic-debugging` owns investigation of an unexplained failure.
+  `implement-plan` owns overall execution and progress; `review-code` owns findings.
+  Investigation need not reopen an agreed design or require a new plan.
+
+These skills are independently invocable. They do not require simulation validation,
+external home skills, mandatory TDD, hooks, or model-specific agent registries.

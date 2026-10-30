@@ -1,7 +1,7 @@
 {
   "name": "coding-skills",
-  "version": "0.2.0",
-  "description": "Codex design, implementation, and review workflows with Python, JAX, Polars, and Rust guidance.",
+  "version": "0.3.0",
+  "description": "Codex workflows and architecture, testing, debugging, Python, JAX, Polars, and Rust guidance.",
   "author": {
     "name": "Mancuso Lab",
     "email": "nick.mancuso@gmail.com",
@@ -24,7 +24,7 @@
   "interface": {
     "displayName": "Coding Skills",
     "shortDescription": "Design, implement, and review software with Codex.",
-    "longDescription": "Coding Skills provides independent design, implementation planning, execution, and code review workflows, plus domain guidance for JAX/Equinox, Polars, Python module design, Python/Rust bridges, and Rust.",
+    "longDescription": "Coding Skills provides independent design, planning, execution, and review workflows; functional core / imperative shell, testing, and debugging guidance; and domain skills for Python, JAX/Equinox, Polars, and Rust.",
     "developerName": "Mancuso Lab",
     "category": "Productivity",
     "capabilities": [

@@ -4,6 +4,49 @@ Validation targets the source-of-truth skills under
 `plugins/coding-skills/skills/`. The historical testing skill named below is
 not a runtime dependency of this plugin.
 
+## 2026-10-24: Architecture, testing, and debugging port (0.3.0)
+
+Added `functional-core-imperative-shell`, `property-based-testing`,
+`writing-good-tests`, and `systematic-debugging`. Simulation validation was
+excluded. Source names are preserved; descriptions intentionally narrow discovery
+to the revised responsibilities. Existing domain skill bodies are unchanged.
+
+Static checks:
+
+- All four new skills pass skill-creator `quick_validate.py` with PyYAML.
+- Plugin and marketplace JSON parse and their source/skill paths resolve;
+  the bundle now contains fourteen skills.
+- Markdown links in the four new skills and four workflow skills resolve in
+  isolated plugin and skills-only copies, including local license notices.
+- `git diff --check` passes. Source playbook files were not edited or packaged.
+
+Independent behavioral trial:
+
+An independent agent read the new skill definitions and applied them to a small
+SQLite inventory reservation service and a separate normalization regression.
+Artifacts were isolated at `/private/tmp/skill-forward-reservation.33PJ21`.
+The parent inspected the implementation/tests and independently reran:
+
+```sh
+uv run --with pytest --with hypothesis python -m pytest -p no:capture -q
+```
+
+Observed results:
+
+- Kept a pure stock decision and an effectful reservation shell in one module;
+  used an explicit `BEGIN IMMEDIATE` transaction with rollback and cleanup.
+- Used known-answer tests, real SQLite integration, a trigger-induced write
+  failure, and generated reservation sequences with conservation assertions.
+  Each generated example received a fresh database.
+- The duplicate-preserving sort regression failed before the fix, and Hypothesis
+  reduced a failure to `[0, 0]`. Diagnosis isolated the `set` conversion; removing
+  it preserved duplicates. Tests checked order, multiplicity, and input preservation.
+- Final suite: ten tests passed; parent rerun also passed all ten.
+
+This is a targeted behavioral trial, not an evaluation of model improvement.
+No with/without-skill comparison, multi-process contention test, numerical
+property trial, or exhaustive runtime/platform validation was performed.
+
 ## 2026-10-24: Codex workflow port
 
 Added `design-software`, `plan-implementation`, `implement-plan`, and

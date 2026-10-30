@@ -11,6 +11,10 @@ distributed under Creative Commons Attribution-ShareAlike 4.0 International:
 - skills/plan-implementation/
 - skills/implement-plan/
 - skills/review-code/
+- skills/functional-core-imperative-shell/
+- skills/property-based-testing/
+- skills/writing-good-tests/
+- skills/systematic-debugging/
 
 Source: Scientific Software Playbook, MancusoLab maintainers and contributors.
 https://github.com/mancusolab/scientific-software-playbook
@@ -36,3 +40,16 @@ See LICENSE.workflows for the source CC BY-SA notice and LICENSE.superpowers
 for the retained upstream MIT notice. The CC BY-SA 4.0 license is available at
 https://creativecommons.org/licenses/by-sa/4.0/ . These attributions do not imply
 endorsement by the source authors.
+
+Additional source material: scientific-house-style's functional-core-imperative-shell,
+property-based-testing, and writing-good-tests, and scientific-plan-execute's
+systematic-debugging. The house-style source attributes patterns to:
+https://github.com/ed3dai/ed3d-plugins/tree/main/plugins/ed3d-house-style
+Each adapted skill retains its source plugin's CC BY-SA notice in LICENSE.
+
+Additional changes: rewrote these four skills for Codex; removed runtime mappings,
+mandatory file labels/splits, blanket logging purity exemptions, mandatory TDD,
+arbitrary retry gates, and unsupported effectiveness claims. Revised property
+selection and test-scope guidance, and added transaction, isolation, numerical,
+and counterexample considerations. Discovery descriptions intentionally reflect
+these narrower responsibilities. No simulation skill was included.

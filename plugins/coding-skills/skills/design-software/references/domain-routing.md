@@ -4,6 +4,10 @@ Load a domain skill only when its subject affects the current task:
 
 | Decision or changed surface | Bundled skill |
 | --- | --- |
+| Computation versus I/O, state, or effect boundaries | `coding-skills:functional-core-imperative-shell` |
+| Test oracles, scope, isolation, or doubles | `coding-skills:writing-good-tests` |
+| Generated inputs, properties, or state-machine tests | `coding-skills:property-based-testing` |
+| Unexplained failures or regressions | `coding-skills:systematic-debugging` |
 | Python module/file boundaries | `coding-skills:python-module-design` |
 | JAX tracing, PyTrees, solvers, AD, or batching | `coding-skills:jax-equinox-numerics` |
 | JAX project APIs, CLI, packaging, CI, or checkpoints | `coding-skills:jax-project-engineering` |
