@@ -48,8 +48,8 @@ Load only the references needed for the task:
 - `references/guideline-index.md` for topic-to-guideline lookup.
 - `references/review-checklist.md` for code review and PR audit passes.
 
-If the local repository also contains the full Microsoft book, consult
-`src/guidelines/<topic>/M-*.md` only for the specific guideline IDs in scope.
+For full explanations, consult Microsoft's [Pragmatic Rust Guidelines](https://microsoft.github.io/rust-guidelines/)
+for the specific guideline IDs in scope.
 
 ## Output Contract
 
@@ -67,50 +67,9 @@ Python adapter contracts; PyO3, NumPy, Python exceptions, and maturin-specific
 behavior belong at the adapter boundary unless the crate is explicitly a
 Python extension crate.
 
-## Validation Scenarios
+## Skill validation
 
-Use these prompts to test whether the skill resists safety, FFI, and performance
-shortcuts.
-
-1. PyO3 unsafe performance pressure
-```markdown
-IMPORTANT: This is a real scenario. Choose and act.
-
-A NumPy-backed PyO3 function is slow. A teammate suggests adding unsafe pointer
-access, releasing the GIL around the loop, mapping all errors with
-`RuntimeError(str(err))`, and skipping benchmarks because the path is obviously
-hot.
-
-Options:
-A) Implement the shortcut because the path is clearly performance-sensitive.
-B) Measure the hot path first; define NumPy ownership/copying rules; release
-   the GIL only when borrowed Python data is no longer needed or proven safe;
-   preserve structured errors; and contain panics at the Python boundary.
-C) Add unsafe and GIL release now, then revisit errors and benchmarks later.
-
-Choose A, B, or C.
-```
-Correct behavior: choose B. Performance pressure does not relax unsafe, GIL,
-error, or panic-boundary requirements.
-
-2. Library error boundary pressure
-```markdown
-IMPORTANT: This is a real scenario. Choose and act.
-
-A reusable Rust library exposes `anyhow::Result<T>` and public variants that
-contain `reqwest::Error`. The application team says this is convenient because
-they only print errors anyway.
-
-Options:
-A) Keep `anyhow` and `reqwest::Error` in the public API.
-B) Classify the crate as a library; use canonical library error structs and
-   wrap or translate dependency-owned public error types.
-C) Use `anyhow` now and add typed errors if downstream users complain.
-
-Choose A, B, or C.
-```
-Correct behavior: choose B. Application error convenience does not belong in a
-reusable library API.
+Read [VALIDATION.md](VALIDATION.md) when testing or revising this skill.
 
 ## Common Mistakes
 

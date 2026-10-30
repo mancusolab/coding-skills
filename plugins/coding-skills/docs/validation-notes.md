@@ -4,6 +4,70 @@ Validation targets the source-of-truth skills under
 `plugins/coding-skills/skills/`. The historical testing skill named below is
 not a runtime dependency of this plugin.
 
+## 2026-10-29: Branch reconciliation
+
+Merged the remote domain cleanup with the local workflow and four-skill ports.
+Preserved both validation histories. The cleanup commit omitted four linked
+`references/validation-scenarios.md` files; restored their prompt contents from
+the prior tracked skill entrypoints.
+
+The cleanup also refers to `snippets/test_ad_examples.py`, which is absent from
+both branches. Its reported seven-test results below are historical claims from
+the cleanup session, not reproducible from the committed files. The missing test
+was not recreated during this merge. Available Python files pass syntax checks;
+local Markdown links and plugin/marketplace JSON were checked after reconciliation.
+
+## 2026-10-29
+
+Fixed four executable-example defects in `jax-equinox-numerics`:
+
+- The implicit JVP example now imports `optimistix.internal.implicit_jvp`,
+  identifies it as an advanced internal API, and demonstrates differentiation
+  through the positive square root. Ordinary solver users are directed to
+  `root_find` with `ImplicitAdjoint`.
+- The reference norm JVP guards the denominator before division so reverse
+  differentiation at zero follows the example's zero-tangent convention.
+- The jitted JVP reference binds the function with `functools.partial` before
+  passing it to `filter_jit`.
+- The finite-difference helper chooses its default step from the input dtype's
+  machine epsilon rather than assuming float64 precision.
+
+The cleanup record describes `test_ad_examples.py` as exercising the reference code blocks and implicit solve under JIT, checking
+analytic derivatives at zero and nonzero inputs. The
+existing finite-difference test checks the dtype-sensitive comparison. These
+tests reproduced the failures before the fixes.
+
+Run the numerical example tests from the repository root:
+
+```bash
+uv run --with jax --with equinox --with lineax --with optimistix --with pytest \
+  pytest -p no:capture -p no:cacheprovider \
+  plugins/coding-skills/skills/jax-equinox-numerics/snippets
+```
+
+Repeat with `JAX_ENABLE_X64=1` to check float64 behavior. The environment used
+JAX 0.12.0.1, Equinox 0.13.8, Lineax 0.1.1, and Optimistix 0.1.0 on CPU.
+
+Reported results from the cleanup session: seven tests passed in each precision mode, all ten non-test Python
+snippets executed, and the modified Python files passed Ruff formatting and
+lint checks. Syntax, companion references, unchanged frontmatter, and preserved
+validation prompts were also checked.
+
+The Codex-only cleanup also:
+
+- Consolidated repeated relative-path, checklist, and snippet instructions.
+- Removed plugin-maintenance instructions from the project-engineering skill,
+  a missing temporary-checkout reference, and undefined CLI profile labels.
+- Replaced the assumed Microsoft book checkout path with its official website.
+- Moved validation prompts from all six entrypoints into linked companion
+  files, preserving the prompts. Load these only when testing or revising the
+  skill.
+- Preserved every skill's frontmatter name and description.
+
+No Claude/Codex compatibility blocks or preprocessing markers were present in
+the skill sources. Remaining ellipses in short domain examples represent
+omitted user code, rather than unexpanded preprocessing placeholders.
+
 ## 2026-10-24: Architecture, testing, and debugging port (0.3.0)
 
 Added `functional-core-imperative-shell`, `property-based-testing`,

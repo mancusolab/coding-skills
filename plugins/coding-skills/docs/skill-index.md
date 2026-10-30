@@ -46,6 +46,7 @@ stability, docs, CLI conventions, packaging, CI, serialization, and testing.
 
 Companion material:
 - `checklists/`
+- `references/`
 - `snippets/`
 
 ## `polars-data-engineering`
@@ -62,6 +63,9 @@ Companion material:
 Python package and module-structure guidance for deciding when to create,
 merge, or split modules and how to organize dataclasses, types, helpers, and
 exceptions.
+
+Companion material:
+- `references/validation-scenarios.md`
 
 ## `python-rust-bridge`
 

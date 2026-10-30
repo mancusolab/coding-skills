@@ -11,10 +11,7 @@ metadata:
 Guidance for software engineering practices around numerical/JAX codebases using
 JAX + Equinox + Lineax + Optimistix.
 
-This file is the entrypoint. Keep it lightweight and load focused references for
-implementation details.
-
-## Scope boundary (authoritative split)
+## Scope boundary
 
 This skill is authoritative for numerics runtime semantics and Equinox module
 rules that affect traced execution:
@@ -36,31 +33,24 @@ This skill is not the source of truth for project-level engineering policy. For:
 - packaging and distribution policy
 use `../jax-project-engineering/SKILL.md`.
 
-## Path Contract (Unambiguous)
+## Companion resources
 
-1. All relative paths in this file resolve from this skill directory (the directory containing this `SKILL.md`).
-2. Companion checklist and snippet paths are installation-local paths relative to this directory.
+Paths below are relative to this skill directory. Read the checklists relevant
+to the task before implementation, apply them while working, and revisit them
+before completion. Document any intentionally unchecked item.
 
-## Companion checklists
+### Checklists
 
-Apply these checklists when using this skill.
-
-### Installation-local paths (relative to this `SKILL.md`)
 - `checklists/jax_equinox_design_checklist.md`
 - `checklists/jit_static_pytree_checklist.md`
 - `checklists/numerics_ad_testing_checklist.md`
 - `checklists/linear_algebra_checklist.md`
 
-## Checklist workflow
-- Before implementation: open the relevant companion checklist(s) and scope the work against them.
-- During implementation: keep checklist items aligned with code/design decisions.
-- Before completion: re-run the checklist and explicitly document any intentionally unchecked item.
+### Snippets
 
-## Companion snippets
+Adapt matching snippets to the target API and verify the adapted code against
+the relevant checklists.
 
-Use these snippets as implementation starters when they match the task.
-
-### Installation-local paths (relative to this `SKILL.md`)
 - `snippets/jit_boundary.py`
 - `snippets/partition_static_state.py`
 - `snippets/filter_vmap_batching.py`
@@ -72,12 +62,8 @@ Use these snippets as implementation starters when they match the task.
 - `snippets/test_jvp_finite_difference.py`
 - `snippets/abc_module_pattern.py`
 
-## Snippet workflow
-- Before implementation: pick a matching snippet and adapt names/signatures to your API.
-- During implementation: keep semantics aligned with this skill's rules and your chosen checklist(s).
-- Before completion: remove stale placeholder code and verify the adapted snippet still satisfies invariants.
+## Definitions
 
-## Definitions (strict)
 - JIT boundary: the public API function wrapped with `eqx.filter_jit`/`jax.jit`.
 - Static data: non-array metadata/config that must be compile-time constant across calls.
 - Dynamic data: array leaves that vary per call and flow through JIT.
@@ -265,39 +251,10 @@ in the same layer unless a boundary contract explicitly requires conversion.
 - Don’t: return unlabeled arrays of samples without chain/draw/parameter semantics and diagnostic context.
 - Why: inference users need interpretable posterior artifacts, not just raw tensors.
 
-## Validation Scenarios
+## Skill validation
 
-Use these prompts to harden boundary-conversion and failure-policy compliance:
-
-1. Dataframe ingress pressure
-```markdown
-IMPORTANT: This is a real scenario. Choose and act.
-
-You need to feed a Polars DataFrame into a jitted solver in 10 minutes.
-A teammate says "just pass the frame through and convert later if needed."
-
-Options:
-A) Pass the DataFrame through JIT and convert inside solver steps.
-B) Convert at ingress (`to_jax()` / `jnp.asarray(...)`) and keep traced numerics array-only.
-C) Convert half now and leave a DataFrame field in solver state.
-
-Choose A, B, or C.
-```
-
-2. Traced exception pressure
-```markdown
-IMPORTANT: This is a real scenario. Choose and act.
-
-Invalid values appear mid-iteration. It's tempting to `raise ValueError` directly from
-the jitted loop because it is the fastest patch.
-
-Options:
-A) Raise Python exceptions from the traced loop.
-B) Validate earlier at boundaries and use JAX-compatible signaling (`result` and/or `eqx.error_if`) inside traced numerics.
-C) Ignore and hope downstream checks catch it.
-
-Choose A, B, or C.
-```
+Read [validation scenarios](references/validation-scenarios.md) when testing or
+revising this skill.
 
 ## Reference map (load on demand)
 
@@ -341,13 +298,3 @@ registration, load `references/ad_checkpointing_callbacks.md` first.
 
 If the task is primarily about dtype policy or numerical guardrails, load
 `references/numerics_dtype_stability.md` first.
-
-## Scope note
-
-Rules in the referenced files are part of this skill. This entrypoint is intentionally concise
-to reduce instruction weight and improve retrieval quality.
-
-## See also: project engineering
-
-For project-level policy (API lifecycle, CLI contracts, docs standards, type/CI gates,
-and serialization packaging), see `../jax-project-engineering/SKILL.md`.

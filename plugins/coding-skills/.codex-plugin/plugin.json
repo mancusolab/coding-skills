@@ -1,6 +1,6 @@
 {
   "name": "coding-skills",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Codex workflows and architecture, testing, debugging, Python, JAX, Polars, and Rust guidance.",
   "author": {
     "name": "Mancuso Lab",
