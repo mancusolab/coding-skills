@@ -62,15 +62,22 @@ codex plugin add coding-skills@coding-skills-local
 Start a new Codex session. You can also install from the `Coding Skills Local`
 marketplace in `/plugins`.
 
-To refresh after pulling changes:
+If bundled skills were previously installed as standalone directories in
+`~/.codex/skills/` or `~/.agents/skills/`, move the matching copies to a backup
+outside the skills directories so the plugin supplies the active definitions.
+Keep unrelated skills in place.
+
+The local marketplace points to this checkout, but installed plugin files are
+cached. After pulling or editing the skill sources, reinstall the plugin:
 
 ```bash
-git pull
+codex plugin remove coding-skills@coding-skills-local
 codex plugin add coding-skills@coding-skills-local
 ```
 
-Then start a new session to load the refreshed skills. `marketplace upgrade`
-refreshes configured Git marketplace snapshots; this setup uses a local checkout.
+Start a new Codex session after reinstalling. `codex plugin marketplace upgrade`
+refreshes Git-backed marketplace snapshots; it does not refresh this local
+plugin installation.
 
 ### Direct skill install
 

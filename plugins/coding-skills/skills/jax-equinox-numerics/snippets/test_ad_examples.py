@@ -58,6 +58,18 @@ def test_implicit_solve_under_jit_and_batching():
     np.testing.assert_allclose(derivatives, [0.5, 0.25, 1 / 6], rtol=1e-6)
 
 
+@pytest.mark.parametrize(
+    "a, expected_root, expected_derivative",
+    [(0.25, 0.5, 1.0), (4.0, 2.0, 0.25), (9.0, 3.0, 1 / 6)],
+)
+def test_implicit_solve_forward_mode_under_jit(a, expected_root, expected_derivative):
+    root, tangent = jax.jit(lambda x: jax.jvp(solve, (x,), (jnp.ones_like(x),)))(
+        jnp.array(a)
+    )
+    np.testing.assert_allclose(root, expected_root, rtol=1e-6)
+    np.testing.assert_allclose(tangent, expected_derivative, rtol=1e-6)
+
+
 def test_reference_jitted_jvp_binding():
     namespace = reference_example(
         "Test JVP/VJP and batching under JIT with finite differences",
