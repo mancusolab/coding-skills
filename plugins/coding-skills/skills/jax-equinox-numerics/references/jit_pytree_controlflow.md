@@ -35,7 +35,9 @@ import equinox as eqx
 def step(model, x):
     return model(x)
 ```
-- Allowed break: Pure array-only functions.
+- Allowed break: Functions over arrays or registered HiType values can use
+  `jax.jit`. Check Equinox filtering support before treating opaque HiTypes as
+  dynamic leaves; see [HiJAX types](hijax_types.md).
 
 ### Rule: Guard against closed-over JAX arrays with `eqxi.nontraceable`
 - Do: Use `eqxi.nontraceable` when you must ensure no closed-over tracers leak across boundaries.
@@ -148,7 +150,9 @@ state = eqx.combine(state_static, new_dyn)
 - Allowed break: Only outside JIT with an explicit re-jit boundary.
 
 ### Rule: Use the right shape-eval tool for structure checks
-- Do: Use `eqx.filter_eval_shape` for mixed PyTrees (arrays + non-arrays), and `jax.eval_shape` for array-only structures.
+- Do: Use `eqx.filter_eval_shape` for mixed PyTrees with static leaves, and
+  `jax.eval_shape` for supported dynamic JAX values. Verify filtering support
+  for opaque HiTypes; non-array does not necessarily mean static.
 - Don’t: Infer structure from runtime values inside JIT.
 - Why: Structure checks must not execute numerics.
 - Example:

@@ -4,6 +4,90 @@ Validation targets the source-of-truth skills under
 `plugins/coding-skills/skills/`. The historical testing skill named below is
 not a runtime dependency of this plugin.
 
+## 2026-11-03: HiJAX hygiene review
+
+Direct review found a declared-output mismatch in `SharedOutputs`: adding a
+strongly typed scalar to a weakly typed scalar produces a strong result, but the
+primitive copied the weak input type. A regression test failed before correcting
+the output's weak-type flag. Three scalar-promotion cases now compare traced
+output types with ordinary JAX arithmetic. All 28 tests pass in default and
+float64 modes. New HiJAX snippets/tests pass Ruff; isolated Markdown links,
+Python syntax, and diff whitespace checks pass.
+
+Removed remaining adjacent array-only restrictions on tracing/shape evaluation,
+clarified that `params` is a dict whose values are hashable, and identified the
+polynomial explicitly where example coverage was ambiguous. Advanced capability
+validation limits above/below remain unchanged; this was not an independent
+agent review.
+
+## 2026-11-03: Primitive derivative contracts and validation oracles
+
+Expanded the primitive reference with symbolic-zero cotangents, PyTree signatures,
+activity masks, preservation of custom rules in higher derivatives, tangent
+linearity, derivation alternatives, shared-output batching, and checkpoint
+compatibility. Advanced accumulators, logs, residuals, and transposition remain
+optional capabilities with version checks, not mandatory implementation policy.
+Consulted the official derivative guide and inspected the installed `HiPrim`
+interface and direct JVP-to-VJP derivation implementation.
+
+Removed routine finite-difference requirements from both JAX skills and replaced
+the finite-difference helper/test with analytic and derivative-identity checks.
+The historical records below describe the tests as they existed at those dates.
+Independent expected answers remain necessary: mutually consistent incorrect
+rules can satisfy linearity and adjoint identities.
+
+Runtime validation on JAX 0.12.0.1 CPU: all 25 numerical snippet tests pass in
+default and float64 modes. Five new structured-output cases exercise a
+handwritten VJP with unused outputs, nonleading-axis mapping, shared versus
+broadcast scalar outputs, higher derivatives, partial JVPs, linearization,
+checkpointing, and explicit rejection of unsupported mapped scalar inputs.
+The checkpoint test covers the active configuration, not both remat engines.
+No accumulator/ref, logging, structured-residual, distributed, or older-version
+runtime validation is claimed.
+
+Static validation: new Python files pass Ruff lint/format; isolated plugin
+Markdown links, Python syntax, and diff whitespace checks pass. Both JAX skills
+pass the skill-creator validator in temporary copies after removing only the
+pre-existing unsupported `user-invocable` key, as explained below. Source
+frontmatter and licensing are preserved. Added four derivative workflow prompts;
+no independent agent trial was run.
+
+## 2026-11-03: Experimental HiJAX types
+
+Added a capability reference for custom HiTypes, linked from the numerics skill
+and primitive guide. Separates experimental API contracts from provisional design
+advice; does not recommend wholesale migration from PyTrees. Corrected array-only
+JIT guidance and qualified Equinox filtered-transform assumptions. Names,
+discovery descriptions, and licensing scope are unchanged.
+
+Runtime validation on JAX 0.12.0.1 (CPU):
+
+- Inspected the installed `HiType`, `MappingSpec`, and `HiPspec` interfaces in
+  addition to the official JAX type guide linked in the new reference.
+- Added an original teaching-only real-array box and five tests for type/value
+  lowering, JIT inputs/results/intermediates, dense tangents, composed AD,
+  nonleading array-axis mapping, batched gradients, scan inputs/carry/outputs,
+  invalid dtype, and inconsistent mapping size.
+- All 20 numerical snippet tests pass in default and float64 modes using
+  `pytest -p no:capture -p no:cacheprovider` through the uv command below.
+- A direct tracing scenario rejects container attribute access under JIT and
+  succeeds through the accessor primitive; the traced jaxpr retains one opaque
+  value between the pack and unpack operations.
+- Distributed transforms, custom tangent accumulation, Equinox filtering, and
+  older JAX versions remain unvalidated. The reference describes their interfaces
+  without claiming that the example implements them.
+
+Static validation: new snippets pass Ruff lint/format and Python syntax checks;
+relative Markdown links resolve in an isolated plugin copy. The installed
+skill-creator validator rejects the existing `user-invocable` frontmatter key.
+It passes on a temporary copy with only that key removed; source frontmatter is
+preserved. This is a validator compatibility limitation, not a clean validator
+pass on the unchanged source.
+
+Added four open-ended workflow scenarios for future behavioral evaluation.
+These prompts and the executable API tests are not an independent agent trial
+or evidence of improved skill effectiveness.
+
 ## 2026-10-29: HiJAX guidance
 
 Replaced the default Equinox internal primitive-helper recommendation with

@@ -59,8 +59,10 @@ the relevant checklists.
 - `snippets/linear_operator_pattern.py`
 - `snippets/custom_jvp_norm.py`
 - `snippets/hijax_polynomial.py`
+- `snippets/hijax_shared_outputs.py`
+- `snippets/hijax_real_box.py`
 - `snippets/implicit_jvp.py`
-- `snippets/test_jvp_finite_difference.py`
+- `snippets/test_derivative_contracts.py`
 - `snippets/abc_module_pattern.py`
 
 ## Definitions
@@ -242,7 +244,7 @@ in the same layer unless a boundary contract explicitly requires conversion.
 - Why: Boundary validation should fail fast, while traced execution requires JAX-compatible control flow.
 
 ### Rule: Verify AD and batching behavior, not just primal outputs
-- Do: Test JVP/VJP vs finite differences under JIT and mapped execution.
+- Do: Check JVP/VJP against analytic or independent reference derivatives under JIT and mapped execution; supplement with linearity and adjoint identities.
 - Don’t: Treat successful forward values as sufficient verification.
 - Why: Most regressions in numerics show up first in gradients and batching semantics.
 
@@ -278,6 +280,9 @@ Load only the files relevant to your task.
   HiJAX primitive selection, and AD-focused test/diagnostic patterns.
 - [HiJAX primitive guidance](references/hijax_primitives.md): new primitive
   definitions, migration from internal helpers, and transformation coverage.
+- [Experimental HiJAX types](references/hijax_types.md): read when custom value
+  types, representation invariants, or distinct tangent types are in scope.
+  Covers capabilities and API contracts; design advice remains provisional.
 
 - `references/numerics_dtype_stability.md`
   Covers dtype normalization, guarded divisions/norms, and early nonfinite surfacing.

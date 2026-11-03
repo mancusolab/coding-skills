@@ -10,16 +10,16 @@ Use this before performance tuning or when encountering retracing.
 
 ## Static vs dynamic
 - [ ] All non-array config is static (fields or partitioned).
-- [ ] `eqx.filter_jit` is preferred for mixed PyTrees/Modules; `jax.jit` is reserved for array-only functions.
-- [ ] No Python objects or containers flow as dynamic inputs.
+- [ ] Use `eqx.filter_jit` for mixed PyTrees/Modules with static leaves; `jax.jit` also supports registered HiTypes. Verify filtered-transform support before using Equinox with opaque HiType values.
+- [ ] Dynamic inputs are JAX-supported values or PyTrees of them; arbitrary unregistered Python objects do not cross traced boundaries.
 - [ ] Multi-source tabular inputs are reconciled by explicit key joins in adapters before conversion; positional row matching is not used.
-- [ ] Table/dataframe objects (Polars/Pandas) are converted to arrays at ingress after reconciliation; traced functions receive only arrays/PyTrees.
+- [ ] Table/dataframe objects (Polars/Pandas) are converted to arrays at ingress after reconciliation; traced functions receive JAX-supported values/PyTrees.
 - [ ] `eqx.filter_closure_convert` is used for functions passed across JIT/AD boundaries.
 - [ ] Closed-over JAX arrays are blocked at boundaries (`eqxi.nontraceable`) when closure conversion is not enough.
 
 ## PyTree stability
 - [ ] State treedef and leaf shapes/dtypes are unchanged across iterations.
-- [ ] Use `eqx.filter_eval_shape` for mixed PyTrees and `jax.eval_shape` for array-only structures.
+- [ ] Choose shape evaluation according to the supported value types; verify filtering behavior for custom HiTypes rather than assuming non-array means static.
 - [ ] Structure checks avoid fabricated dummy arrays.
 - [ ] `eqx.partition` + `eqx.combine` are used to keep static leaves fixed.
 

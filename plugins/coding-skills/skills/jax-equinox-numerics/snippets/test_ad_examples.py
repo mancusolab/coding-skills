@@ -72,7 +72,7 @@ def test_implicit_solve_forward_mode_under_jit(a, expected_root, expected_deriva
 
 def test_reference_jitted_jvp_binding():
     namespace = reference_example(
-        "Test JVP/VJP and batching under JIT with finite differences",
+        "Test derivative contracts and batching under JIT",
         {"f": lambda x: x * x, "x": jnp.array([2.0, 3.0]), "tx": jnp.array([1.0, 2.0])},
     )
     np.testing.assert_allclose(namespace["out"], [4.0, 9.0], rtol=1e-6)

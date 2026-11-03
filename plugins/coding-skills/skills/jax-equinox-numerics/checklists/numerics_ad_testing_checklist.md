@@ -20,10 +20,14 @@ Use this for solver implementation and verification.
 
 ## Custom AD
 - [ ] Custom AD chooses function-level filtered wrappers or a HiJAX primitive according to the required transformation contract; existing internal extensions are migrated only with equivalent coverage.
-- [ ] JVP/VJP calls on PyTree inputs use `eqx.filter_jvp`/`eqx.filter_vjp`.
+- [ ] JVP/VJP calls on mixed PyTree inputs use appropriate filtered wrappers; custom HiTypes need verified wrapper support or native JAX transforms.
 - [ ] Tangent-path solves use an explicit failure contract (`throw=True` or equivalent fail-fast behavior) when failures cannot be returned through a status channel.
 - [ ] New HiJAX primitives declare types/static parameters and a traceable expansion; required JVP, VJP, linearization, and batching behavior is implemented or explicitly derived and tested.
 - [ ] Experimental HiJAX usage is checked against the project's supported JAX versions.
+- [ ] Handwritten rules handle unused-output symbolic zeros and match argument/output PyTrees; forward-rule primals preserve the primitive boundary.
+- [ ] Derived transposition uses tangent-linear rules without circular derivations; shared-input/output batch reductions and required checkpoint compositions have independent expected answers.
+- [ ] For custom HiTypes, [type capabilities](../references/hijax_types.md) are selected explicitly; lowering, representation invariants, tangent semantics, and required transform compositions are tested.
+- [ ] HiType constructors/accessors in traced code and AD rules use primitives; required mapping/scan/sharding contracts are validated separately from basic JIT support.
 - [ ] Nondifferentiable state/options/metadata are guarded (`eqxi.nondifferentiable` / `eqxi.nondifferentiable_backward`).
 
 ## Memory and callbacks
@@ -32,7 +36,7 @@ Use this for solver implementation and verification.
 
 ## Testing
 - [ ] JIT + vmap + grad are exercised in tests.
-- [ ] JVPs are checked against finite differences where feasible.
+- [ ] Derivatives match analytic or independent reference answers; linearity and JVP/VJP adjoint identities supplement, rather than replace, that oracle.
 - [ ] Batching invariants hold (vmapped vs unbatched consistency).
 - [ ] Failure modes (max_steps, nonfinite, ill-conditioned) are tested.
 

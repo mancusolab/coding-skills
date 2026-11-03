@@ -34,7 +34,8 @@ def f(x):
 
 value, tangents = eqx.filter_jvp(f, (x,), (tx,))
 ```
-- Allowed break: Plain array functions.
+- Allowed break: Native JAX transforms support arrays and registered HiTypes;
+  verify Equinox filtering support before using it with opaque values.
 
 ### Rule: Use `throw=True` in tangent solves when errors can't be routed
 - Do: Force `throw=True` inside tangent/JVP/VJP solves to avoid silent failures.
@@ -141,8 +142,8 @@ def _jvp(primals, tangents):
 
 ## Performance instrumentation and testing
 
-### Rule: Test JVP/VJP and batching under JIT with finite differences
-- Do: Validate AD using finite differences and test vmapped solves.
+### Rule: Test derivative contracts and batching under JIT
+- Do: Validate AD against analytic derivatives or an independent reference and test vmapped solves. Add tangent linearity and JVP/VJP adjoint checks for mathematical derivatives; agreement between two rules alone does not prove correctness.
 - Don’t: Only test primal outputs for iterative solvers.
 - Why: Catches AD regressions and batching bugs early.
 - Example:
@@ -151,9 +152,10 @@ import functools as ft
 import equinox as eqx
 
 out, t_out = eqx.filter_jit(ft.partial(eqx.filter_jvp, f))((x,), (tx,))
-# compare with finite_difference_jvp(...)
+# Compare t_out with an independently derived expected directional derivative.
 ```
-- Allowed break: Minimal smoke tests for early prototypes.
+- For surrogate gradients or nonsmooth conventions, test the declared rule directly.
+  Numerical perturbations of the primal do not define that contract.
 
 ### Rule: Use debug hooks and structured errors for diagnostics
 - Do: Use `eqx.error_if`, `jax.debug.print`, and `EQX_ON_ERROR=breakpoint`.

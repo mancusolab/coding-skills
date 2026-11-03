@@ -17,14 +17,14 @@ Use this to validate correctness, AD, and batching behavior.
 - [ ] Include singular/ill-conditioned and nonfinite cases.
 
 ## AD checks
-- [ ] Compare JVPs to finite differences for key APIs.
+- [ ] Compare derivatives to analytic or independent reference answers; check declared conventions explicitly for surrogate/nonsmooth rules.
 - [ ] Test reverse‑mode gradients when supported.
 - [ ] Confirm AD behavior under JIT and vmap.
 
 ## PyTree + static/dynamic behavior
 - [ ] Partition dynamic/static args in tests and recombine inside the function.
 - [ ] Confirm PyTree structure stability across iterations.
-- [ ] Verify table/dataframe adapters convert at boundaries and traced numerics run on arrays only.
+- [ ] Verify table/dataframe adapters convert to arrays at boundaries; traced numerics receive supported JAX values or PyTrees of them, including registered HiTypes where used.
 
 ## Performance regressions (smoke)
 - [ ] vmapped vs unbatched consistency.

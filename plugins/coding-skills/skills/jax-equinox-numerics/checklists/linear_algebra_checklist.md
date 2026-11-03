@@ -9,7 +9,7 @@ Use this for linear solves, least squares, Jacobian operators, and preconditioni
 
 ## Shape/structure
 - [ ] Vector and operator structures match (PyTree shape/dtype compatible).
-- [ ] Use `eqx.filter_eval_shape` for mixed PyTrees and `jax.eval_shape` for array-only structures.
+- [ ] Use `eqx.filter_eval_shape` for mixed PyTrees with static leaves; verify filtering support before applying it to opaque HiTypes.
 - [ ] Keep operator input/output structures static.
 
 ## Solver configuration
